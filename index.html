@@ -1,0 +1,37 @@
+<html>
+    <body>
+        <h1 id="name">Loading...</h1>
+        <button onclick="generate();">Generate Name</button>
+
+        <script>
+            let nouns = [];
+            let verbs = [];
+            
+            function capitalize(string) {
+                return string.charAt(0).toUpperCase() + string.slice(1);
+            }
+
+            function generate() {
+                let noun = capitalize(nouns[Math.floor(Math.random()*nouns.length)]);
+                let verb = capitalize(verbs[Math.floor(Math.random()*verbs.length)]);
+
+                let name = `${verb} of the ${noun}`;
+                document.getElementById('name').innerText = name;
+                return name;
+            }
+
+            async function fetchWordListsAsync() {
+                let response = null;
+                response = await fetch('https://raw.githubusercontent.com/taikuukaits/SimpleWordlists/master/Wordlist-Nouns-Common-Audited-Len-3-6.txt');
+                nouns = (await response.text()).split("\n");
+
+                response = await fetch('https://raw.githubusercontent.com/taikuukaits/SimpleWordlists/master/Wordlist-Verbs-All.txt');
+                verbs = (await response.text()).split("\n");
+            }
+
+            fetchWordListsAsync().then(() => {
+                generate();
+            });
+        </script>
+    </body>
+</html>
